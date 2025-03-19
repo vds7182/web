@@ -1,0 +1,79 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr; 
+    grid-template-rows: 200px;
+    gap: 10px; 
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+}
+.he{
+    margin-top: 61px;
+    text-align: center;
+    font-weight: bold;
+    font-family:'Inter',sans-serif;
+}
+.grid-item {
+    
+    font-family:'Inter',sans-serif;
+    background: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.grid-item:hover
+{
+    box-shadow: 10px 5px 5px black;
+}
+nav
+{background: #eee8e8;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center; 
+    z-index: 1000;
+    color: black;
+
+
+}
+nav
+{background: #eee8e8;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center; 
+    z-index: 1000;
+    color: black;
+
+
+}
+a
+{
+    color: #000000;
+    text-decoration: none;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+}
+button:hover {
+    background-color: #0056b3;
+    box-shadow: inset;
+}
