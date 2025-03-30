@@ -1,16 +1,17 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const cors = require("cors");
+const path=require("path")
 
 const app = express();
 app.use(cors());
 
-// Создаем подключение к базе данных MySQL
+// Подключение к базе данных
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",  // Если ты используешь пароль, добавь поле password
-  password: "Marvel229", // Укажи свой пароль, если он есть
-  database: "web"  
+  user: "root",  // Используй свой логин, если нужно
+  password: "Marvel229",  // Укажи свой пароль, если он есть
+  database: "web"  // Название твоей базы данных
 });
 
 db.connect((err) => {
@@ -21,15 +22,22 @@ db.connect((err) => {
   }
 });
 
-// Маршрут для получения пользователей
-app.get("/users", (req, res) => {
-  db.query("SELECT * FROM users", (err, results) => {
+// Маршрут для получения всех вакансий с idVacant, salary, city, about
+app.get("/vacancies", (req, res) => {
+  const query = "SELECT idVacant, Salary, City, About FROM vacant";  // Запрос к базе данных для получения данных
+
+  db.query(query, (err, results) => {
     if (err) {
       res.status(500).send("Ошибка при получении данных.");
     } else {
-      res.json(results); // Отправляем данные в формате JSON
+      res.json(results);  // Отправляем результаты в формате JSON
     }
   });
+});
+
+// Запуск сервера
+app.get('/', (req, res)=> {
+  res.sendFile(path.join(__dirname,'main.html'));
 });
 
 app.listen(3000, () => {
