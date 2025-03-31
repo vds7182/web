@@ -1,45 +1,46 @@
-const express = require("express");
+const http = require("http");
 const mysql = require("mysql2");
-const cors = require("cors");
-const path=require("path")
+const fs = require("fs");
+const path = require("path");
 
-const app = express();
-app.use(cors());
-
-// Подключение к базе данных
+// Database connection (unchanged)
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",  // Используй свой логин, если нужно
-  password: "Marvel229",  // Укажи свой пароль, если он есть
-  database: "web"  // Название твоей базы данных
+  user: "root",
+  password: "Marvel229",
+  database: "web"
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error("Ошибка подключения к базе данных: ", err);
-  } else {
-    console.log("Подключено к базе данных MySQL!");
+// HTTP server
+const server = http.createServer((req, res) => {
+  const url = req.url;
+
+  // API endpoint: /vacancies
+  if (url === "/vacancies" && req.method === "GET") {
+    const query = "SELECT idVacant, Salary, City, About FROM Vacant"; // ✅ Fixed table name
+    db.query(query, (err, results) => {
+      if (err) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Database error" }));
+        return;
+      }
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(results));
+    });
+  }
+  // Serve static files (main.html, etc.)
+  else {
+    let filename = path.join(__dirname, url === "/" ? "main.html" : url);
+    fs.readFile(filename, (err, data) => {
+      if (err) {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("404 Not Found");
+        return;
+      }
+      res.writeHead(200);
+      res.end(data);
+    });
   }
 });
 
-// Маршрут для получения всех вакансий с idVacant, salary, city, about
-app.get("/vacancies", (req, res) => {
-  const query = "SELECT idVacant, Salary, City, About FROM vacant";  // Запрос к базе данных для получения данных
-
-  db.query(query, (err, results) => {
-    if (err) {
-      res.status(500).send("Ошибка при получении данных.");
-    } else {
-      res.json(results);  // Отправляем результаты в формате JSON
-    }
-  });
-});
-
-// Запуск сервера
-app.get('/', (req, res)=> {
-  res.sendFile(path.join(__dirname,'main.html'));
-});
-
-app.listen(3000, () => {
-  console.log("Сервер работает на порту 3000");
-});
+server.listen(3000, () => console.log("Server running on http://localhost:3000"));
