@@ -1,44 +1,57 @@
+let vacanciesData = []; // Store vacancies globally
+
 document.addEventListener("DOMContentLoaded", () => {
   fetch("http://localhost:3000/vacancies")
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-      console.log("Data received:", data);
-      
-      const gridContainer = document.getElementById("grid-container");
-      
-      // Create grid container if it doesn't exist
-      if (!gridContainer) {
-        const newContainer = document.createElement("div");
-        newContainer.id = "grid-container";
-        newContainer.className = "vacancy-grid";
-        document.body.appendChild(newContainer);
-      }
-      
-      // Clear previous content
-      gridContainer.innerHTML = "";
-      
-      // Create grid items for each vacancy
-      data.forEach(vacancy => {
-        const gridItem = document.createElement("div");
-        gridItem.className = "vacancy-card";
-        
-        gridItem.innerHTML = `
-          <h3>${vacancy.City || "Location not specified"}</h3>
-          <p class="salary">$${vacancy.Salary || "Salary not specified"}</p>
-          <p class="description">${vacancy.About || "No description available"}</p>
-        `;
-        
-        gridContainer.appendChild(gridItem);
-      });
+      vacanciesData = data;
+      displayVacancies(vacanciesData);
     })
-    .catch(error => {
-      console.error("Fetch error:", error);
-      const errorElement = document.createElement("div");
-      errorElement.className = "error-message";
-      errorElement.textContent = "Failed to load vacancies. Please try again later.";
-      document.body.appendChild(errorElement);
-    });
+    .catch(error => console.error("Fetch error:", error));
 });
+
+function displayVacancies(data) {
+  const gridContainer = document.getElementById("grid-container");
+  gridContainer.innerHTML = "";
+
+  data.forEach(vacancy => {
+    const gridItem = document.createElement("div");
+    gridItem.className = "vacancy-card";
+    
+    // Create the button
+    const button = document.createElement("button");
+    button.textContent = "Подати заявку";
+    button.style.backgroundColor = "#007bff"; // Initial color
+    button.style.color = "white"; 
+
+    // Add click event to change text and color
+    button.addEventListener("click", () => {
+        button.textContent = "Заявку подано";
+        button.style.backgroundColor = "green"; // Change color to green
+        button.disabled = true; // Optional: Disable the button after clicking
+    });
+
+    gridItem.innerHTML = `
+      <h3>${vacancy.City}</h3>
+      <p class="salary">$${vacancy.Salary}</p>
+      <p class="description">${vacancy.About}</p>
+    `;
+
+    // Append button separately to avoid overwriting innerHTML
+    gridItem.appendChild(button);
+
+    gridContainer.appendChild(gridItem);
+});
+
+}
+
+function applySorting() {
+  const sortBy = document.getElementById("sort-options").value;
+  let sortedData = [...vacanciesData];
+
+  if (sortBy === "salary_asc") sortedData.sort((a, b) => a.Salary - b.Salary);
+  if (sortBy === "salary_desc") sortedData.sort((a, b) => b.Salary - a.Salary);
+  if (sortBy === "city") sortedData.sort((a, b) => a.City.localeCompare(b.City));
+
+  displayVacancies(sortedData);
+}
