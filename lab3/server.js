@@ -2,14 +2,13 @@ const http = require("http");
 const mysql = require("mysql2");
 const fs = require("fs");
 const path = require("path");
-const cors = require("cors"); // Імпортуємо cors
+const cors = require("cors");
 const express = require('express');
 
-// Додаємо CORS middleware
-const app = require('express')();
-app.use(cors());  // Це дозволить доступ до серверу з усіх джерел
+const app = express();
+app.use(cors());
 
-// Database connection (залишаємо без змін)
+// Database connection
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -19,16 +18,40 @@ const db = mysql.createConnection({
 
 // API endpoint: /vacancies
 app.get("/vacancies", (req, res) => {
-  const query = "SELECT idVacant, Salary, City, About FROM Vacant"; // ✅ Fixed table name
+  console.log("Fetching vacancies..."); // Логирование начала запроса
+  
+  const query = "SELECT idVacant AS id, Salary, City, About, add_date FROM Vacant";
+  
   db.query(query, (err, results) => {
     if (err) {
+      console.error("Database error:", err); // Логирование ошибки
       res.status(500).json({ error: "Database error" });
       return;
     }
-    res.status(200).json(results);
+    
+    console.log("Query results:", results); // Логирование результатов
+    
+    // Преобразуем даты в правильный формат, если нужно
+    const formattedResults = results.map(item => {
+      return {
+        ...item,
+        // Если add_date - это объект Date MySQL, преобразуем в строку
+        add_date: item.add_date ? formatDate(item.add_date) : null
+      };
+    });
+    
+    res.status(200).json(formattedResults);
   });
 });
 
-// Serve static files (main.html, etc.)
-app.use(express.static(path.join(__dirname, 'public')));  // Заміни на твої файли
+// Функция для форматирования даты
+function formatDate(date) {
+  if (date instanceof Date) {
+    return date.toISOString().split('T')[0].replace(/-/g, '.');
+  }
+  return date; // Если это уже строка
+}
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
 app.listen(3001, () => console.log("Server running on http://localhost:3001"));

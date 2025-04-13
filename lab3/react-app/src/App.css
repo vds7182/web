@@ -1,5 +1,12 @@
 /* Убираем отступы сверху */
 /* Сбрасываем стандартные отступы и padding для всех элементов */
+html, body {
+  height: 100%; /* Убедитесь, что тело сайта занимает весь экран */
+  margin: 0;
+  padding: 0;
+  background-color: #282c34; /* Черный фон для всего сайта */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +21,21 @@
   justify-content: space-between;
  
 }
+/* Сбрасываем margin и padding для всех элементов */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Убираем лишний белый фон и убираем рамки вокруг body */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #282c34; /* Черный фон */
+   /* Белый цвет текста */
+}
+
 nav {
   margin-top: 0;
   padding: 0;
