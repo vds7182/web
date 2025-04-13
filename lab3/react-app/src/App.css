@@ -1,62 +1,37 @@
-.App {
-  text-align: center;
-  background-color: #282c34;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-nav
-{background: #eee8e8;
-    padding: 15px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center; 
-    z-index: 1000;
-    color: black;
-
-
-}
-img
-{
-  margin-top: 100px;
-  background-color: #282c34;
+/* Убираем отступы сверху */
+/* Сбрасываем стандартные отступы и padding для всех элементов */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  padding: 5px 20px; /* Ще менші відступи */
+  min-height: 60px; /* Мінімальна висота, а не фіксована */
   display: flex;
-  flex-direction: column;
-  align-items: top;
-  justify-content: top;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  justify-content: space-between;
+ 
 }
-.word
-{
-  text-align: left;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serifs;
+nav {
+  margin-top: 0;
+  padding: 0;
 }
 
-.App-link {
-  color: #61dafb;
+nav ul {
+  list-style-type: none; /* Убираем маркеры */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Используем flexbox для выравнивания в одну строку */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+nav li {
+  margin-right: 20px; /* Промежуток между ссылками */
+}
+
+nav a {
+  text-decoration: none; /* Убираем подчеркивание */
+  color: #000; /* Цвет ссылок */
+  font-size: 18px; /* Размер шрифта */
 }
