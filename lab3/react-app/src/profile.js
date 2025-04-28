@@ -1,5 +1,5 @@
 import React from 'react';
-import './profile.css'; 
+import './profile.css'; // Optional: if you have styles
 
 function Profile() {
   return (
@@ -8,7 +8,7 @@ function Profile() {
 
         <div className="profile-container">
           <img
-            src="/ava.jpg"
+            src="/Users/mihailmirosnicenko/Downloads/default-avatar-icon-of-social-media-user-vector.jpg"
             width="200"
             height="200"
             alt="Аватар користувача"

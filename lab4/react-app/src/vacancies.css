@@ -1,0 +1,128 @@
+/* Grid Container Styles */
+.vacancy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #282c34; /* Черный фон */
+     /* Белый цвет текста */
+  }
+  nav
+{background: #eee8e8;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center; 
+    z-index: 1000;
+    color: black;
+
+
+}
+/* Сбрасываем все отступы */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Фон для всего сайта */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Черный фон */
+    color: #fff; /* Белый текст */
+  }
+  
+  /* Пример других стилизаций */
+  .vacancy-card {
+    margin: 10px;
+    padding: 15px;
+    background-color: #333; /* Темный фон для карточек вакансий */
+  }
+  
+h1{
+    margin-top: 61px;
+    text-align: center;
+    font-weight: bold;
+    font-family:'Inter',sans-serif;
+}
+nav
+{background: #eee8e8;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center; 
+    z-index: 1000;
+    color: black;
+
+
+}
+a
+{
+    color: #000000;
+    text-decoration: none;
+}
+  /* Grid Item/Card Styles */
+  .vacancy-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .vacancy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .vacancy-card h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .vacancy-card .salary {
+    font-weight: bold;
+    color: #2a6496;
+    font-size: 1.2em;
+  }
+  
+  .vacancy-card .description {
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  .error-message {
+    color: #d9534f;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+}
+button:hover {
+    background-color: #0056b3;
+    box-shadow: inset;
+}

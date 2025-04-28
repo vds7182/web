@@ -10,7 +10,7 @@
     bottom: 250px;
     right: 10px;
     font-size: 18px;
-    color:#836969;
+    color: rgb(83, 80, 80);
 }
 .profile-container {
     border-radius: 100%;
@@ -53,11 +53,9 @@ nav
 
 
 }
-.text_l
+.text_l:p
 {
-    
-    margin-top:300px;
-    color:#836969;
+    border: 2px solid powderblue;
   padding: 30px;
   font-family:'Inter',sans-serif;
 }
