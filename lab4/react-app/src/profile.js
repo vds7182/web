@@ -1,11 +1,60 @@
-import React from 'react';
-import './profile.css'; 
+import React, { useState, useEffect } from "react";
+import "./profile.css";
+import { auth, db } from "./firebase-config"; // Import Firebase Auth and Firestore
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 function Profile() {
+  const [user, setUser] = useState(null); // To store the logged-in user
+  const [profileData, setProfileData] = useState({
+    workExperience: "",
+    skills: "",
+  }); // To store profile data
+  const [editing, setEditing] = useState(false); // Track edit mode
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setProfileData(userDoc.data());
+        }
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleEditToggle = () => {
+    setEditing(!editing);
+  };
+
+  const handleSave = async () => {
+    if (user) {
+      try {
+        await setDoc(doc(db, "users", user.uid), profileData);
+        setEditing(false);
+        alert("Profile updated successfully!");
+      } catch (error) {
+        console.error("Error saving profile:", error);
+        alert("Failed to save profile.");
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="profile">
       <header>
-
         <div className="profile-container">
           <img
             src="/ava.jpg"
@@ -13,45 +62,45 @@ function Profile() {
             height="200"
             alt="Аватар користувача"
           />
-          <p>Олексій Савчеко Олексанрович</p>
+          <p>{user ? user.displayName || "Анонімний користувач" : "Не авторизовано"}</p>
         </div>
       </header>
 
       <div className="bottom-text">
-        <p>
-          Олексій Савченко Олександрович<br />
-          Телефон: +38096223421<br />
-          Email: oleksiy.savchenko@email.com<br />
-          LinkedIn: linkedin.com/in/oleksiy-savchenko<br />
-          GitHub: github.com/oleksiy-savchenko
-        </p>
+        <p>Телефон: {user ? user.phoneNumber || "Не вказано" : "Не авторизовано"}</p>
+        <p>Email: {user ? user.email : "Не авторизовано"}</p>
       </div>
 
       <div className="text_l">
         <p>ПРОФЕСІЙНИЙ ДОСВІД</p>
-        <p>Програміст (Junior Developer)</p>
-        <br />
-        <p>
-          ABC Tech Solutions – Київ, Україна<br />
-          Червень 2022 – Теперішній час
-        </p>
-        <p>
-          Розробка веб-додатків з використанням JavaScript, HTML5, CSS3, React.<br />
-          Робота з API та інтеграція зовнішніх сервісів у проекти.<br />
-          Створення адаптивних інтерфейсів для різних типів пристроїв.<br />
-          Використання Git для контролю версій та спільної роботи з командою.<br />
-          Практикант-програміст
-        </p>
-        <p>
-          XYZ IT Company – Київ, Україна<br />
-          Січень 2021 – Травень 2022
-        </p>
-        <p>
-          Допомога в розробці backend на Python, Django.<br />
-          Робота з базами даних MySQL, MongoDB.<br />
-          Підтримка та оновлення існуючих систем, виправлення багів.<br />
-          Написання тестів та забезпечення високої якості коду.
-        </p>
+        {editing ? (
+          <textarea
+            name="workExperience"
+            value={profileData.workExperience}
+            onChange={handleChange}
+            placeholder="Додайте досвід роботи"
+          />
+        ) : (
+          <p>{profileData.workExperience || "Досвід роботи не вказано"}</p>
+        )}
+
+        <p>НАВИЧКИ</p>
+        {editing ? (
+          <textarea
+            name="skills"
+            value={profileData.skills}
+            onChange={handleChange}
+            placeholder="Додайте навички"
+          />
+        ) : (
+          <p>{profileData.skills || "Навички не вказано"}</p>
+        )}
+
+        {user && (
+          <button onClick={editing ? handleSave : handleEditToggle}>
+            {editing ? "Зберегти" : "Редагувати"}
+          </button>
+        )}
       </div>
     </div>
   );

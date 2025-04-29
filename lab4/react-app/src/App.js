@@ -37,7 +37,6 @@ function App() {
             <ul>
               <li><Link to="/">Головна</Link></li>
               <li><Link to="/jobs">Вакансії</Link></li>
-              <li><Link to="/profile">Мій профіль</Link></li>
               <li><Link to="/filter">Сортувати вакансії</Link></li>
               {!user && (
                 <>
@@ -46,11 +45,16 @@ function App() {
                 </>
               )}
               {user && (
+
+                <>
+                <li><Link to="/profile">Мій профіль</Link></li>
                 <li>
                   <button onClick={handleLogout} className="logout-button">
                     Вийти
                   </button>
                 </li>
+                
+                </>
               )}
             </ul>
           </nav>
