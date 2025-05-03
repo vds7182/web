@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "./firebase-config"; // Import the initialized Firestore instance
-import './vacancies.css'
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./firebase-config"; // Your initialized Firebase
+import './vacancies.css';
 
 function Vacancies() {
+  const [user, setUser] = useState(null);
   const [vacancies, setVacancies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // 🔹 Watch for auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser); // Set the logged-in user or null
+    });
+
+    return () => unsubscribe(); // Cleanup the observer
+  }, []);
 
   useEffect(() => {
     const fetchVacancies = async () => {
@@ -38,9 +49,11 @@ function Vacancies() {
         <h3>{vacancy.City}</h3>
         <p className="salary">₴ {vacancy.Salary}</p>
         <p className="description">{vacancy.About}</p>
-        <button onClick={handleApply} style={{ backgroundColor: "#007bff", color: "white" }}>
-          Подати заявку
-        </button>
+        {user && (
+          <button onClick={handleApply} style={{ backgroundColor: "#007bff", color: "white" }}>
+            Подати заявку
+          </button>
+        )}
       </div>
     ));
   };

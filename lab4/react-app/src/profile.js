@@ -62,8 +62,17 @@ function Profile() {
             height="200"
             alt="Аватар користувача"
           />
-          <p>{user ? user.displayName || "Анонімний користувач" : "Не авторизовано"}</p>
-        </div>
+         
+        {editing ? (
+          <textarea
+            name="Name"
+            value={profileData.Name}
+            onChange={handleChange}
+            placeholder="Додайте ваше імʼя"
+          className="small-textarea"/>
+        ) : (
+          <p>{profileData.Name || "Імʼя не вказано"}</p>
+        )}        </div>
       </header>
 
       <div className="bottom-text">
@@ -79,7 +88,7 @@ function Profile() {
             value={profileData.workExperience}
             onChange={handleChange}
             placeholder="Додайте досвід роботи"
-          />
+          className="big-textarea"/>
         ) : (
           <p>{profileData.workExperience || "Досвід роботи не вказано"}</p>
         )}
@@ -91,13 +100,13 @@ function Profile() {
             value={profileData.skills}
             onChange={handleChange}
             placeholder="Додайте навички"
-          />
+            className="big-textarea"/>
         ) : (
           <p>{profileData.skills || "Навички не вказано"}</p>
         )}
 
         {user && (
-          <button onClick={editing ? handleSave : handleEditToggle}>
+          <button onClick={editing ? handleSave : handleEditToggle} className="change">
             {editing ? "Зберегти" : "Редагувати"}
           </button>
         )}
