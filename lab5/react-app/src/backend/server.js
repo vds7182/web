@@ -3,14 +3,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 🔹 Вказуємо шлях до папки зі статичними файлами
-app.use(express.static(path.join(__dirname, '../src')));
+// Видаємо статичні файли з React'у
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// 🔹 Повертаємо index.html для будь-якого GET-запиту (для SPA, наприклад React)
+// Для всіх інших запитів повертаємо index.html (для SPA)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src', 'App.js'));
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server is running at http://localhost:${PORT}`);
 });
