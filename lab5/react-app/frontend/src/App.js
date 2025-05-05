@@ -7,6 +7,7 @@ import Jobs from './vacancies';
 import Filter from './filter';
 import Login from './login'; 
 import Sing from './singin';
+import UserApplications from './UserApplication'
 import './App.css';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
 
                 <>
                 <li><Link to="/profile">Мій профіль</Link></li>
+                <li><Link to="applications">Мої заявки</Link></li>
                 <li>
                   <button onClick={handleLogout} className="logout-button">
                     Вийти
@@ -67,6 +69,7 @@ function App() {
           <Route path="/filter" element={<Filter />} />
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
           <Route path="/singin" element={!user ? <Sing /> : <Navigate to="/" />} />
+          <Route path="applications" element={user ? <UserApplications/> : <Navigate to="/"/>}/>
         </Routes>
       </div>
     </Router>
