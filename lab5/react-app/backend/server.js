@@ -2,22 +2,15 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-import { readFileSync } from 'fs';
-import admin from 'firebase-admin';
 
-// Fix `__dirname` in ESM
+import { db } from './firebase-db.js'; // Import the Firebase database connection
+
+import dotenv from 'dotenv';
+dotenv.config({ path: './idk.env' });
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Load Firebase service account JSON securely
-const serviceAccount = JSON.parse(readFileSync('./serviceAccount.json', 'utf-8'));
-
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,12 +26,12 @@ app.get('/applications/:userId', async (req, res) => {
     const applications = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     res.json(applications);
   } catch (err) {
-    console.error('Error fetching applications for user:', err);
+    console.error('Error fetching applications:', err);
     res.status(500).json({ error: 'Failed to fetch user applications' });
   }
 });
 
-// 🔹 Add new application (example for POST)
+// 🔹 Add new application
 app.post('/applications', async (req, res) => {
   try {
     const newApplication = req.body;
@@ -49,6 +42,7 @@ app.post('/applications', async (req, res) => {
     res.status(500).json({ error: 'Failed to add application' });
   }
 });
+
 // 🔹 Fetch user details by userId
 app.get('/user/:userId', async (req, res) => {
   try {
@@ -84,7 +78,13 @@ app.post('/user/:userId', async (req, res) => {
 // 🔹 Serve static frontend files (React or other SPA)
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// 🔹 Wildcard route to handle React frontend navigation
+// 🔹 Wildcard route to handle frontend navigation
+app.use((req, res, next) => {
+  if (req.path.startsWith('/user') || req.path.startsWith('/applications')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 // 🔹 Start the server
 app.listen(PORT, () => {
